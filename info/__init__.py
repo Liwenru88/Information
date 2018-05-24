@@ -4,9 +4,8 @@ from redis import StrictRedis
 from flask_session import Session
 from flask_wtf.csrf import CSRFProtect
 from Config import configs
-import logging
-
 from logging.handlers import RotatingFileHandler
+import logging
 
 
 def setup_log(level):
