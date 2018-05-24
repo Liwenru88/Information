@@ -1,4 +1,5 @@
 from redis import StrictRedis
+import logging
 
 
 class Config(object):
@@ -32,11 +33,18 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     """开发环境下的配置"""
+
+    # 开发环境下的日志等级警告
+    LOGGING_LEVEL = logging.DEBUG
+
     pass
 
 
 class ProductionConfig(Config):
     """生产环境下的配置 最终上线的配置"""
+
+    # 生产环境下日志等级警告
+    LOGGING_LEVEL = logging.WARN
 
     # 生产环境关闭调试模式
     DEBUG = False
@@ -47,6 +55,10 @@ class ProductionConfig(Config):
 
 class UnittestConfig(Config):
     """测试环境下的配置"""
+
+    # 测试环境下等级警告
+    LOGGING_LEVEL = logging.DEBUG
+
     # 开启测试模式
     TESTING = True
 
