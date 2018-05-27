@@ -14,7 +14,7 @@ class Config(object):
     DEBUG = True
 
     # 配置mysql数据库连接
-    SQLALCHEMY_DATABASE_URI = "msyql://root:123@192.168.76.110:3306/information"
+    SQLALCHEMY_DATABASE_URI = "mysql://root:123@192.168.76.110:3306/information"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # 配置Redis数据库连接
@@ -50,7 +50,7 @@ class ProductionConfig(Config):
     DEBUG = False
 
     # 生产模式下的MySQL数据库连接
-    SQLALCHEMY_DATABASE_URI = "msyql://root:123@192.168.76.110:3306/information"
+    SQLALCHEMY_DATABASE_URI = "mysql://root:123@192.168.76.110:3306/information"
 
 
 class UnittestConfig(Config):
@@ -63,7 +63,7 @@ class UnittestConfig(Config):
     TESTING = True
 
     # 测试模式模式下的MySQL数据库连接
-    SQLALCHEMY_DATABASE_URI = "msyql://root:123@192.168.76.110:3306/information"
+    SQLALCHEMY_DATABASE_URI = "mysql://root:123@192.168.76.110:3306/information"
 
 
 configs = {

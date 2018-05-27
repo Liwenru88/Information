@@ -5,7 +5,6 @@ from flask_session import Session
 from flask_wtf.csrf import CSRFProtect
 from Config import configs
 from logging.handlers import RotatingFileHandler
-from info.modules.index import index_blue
 import logging
 
 
@@ -22,6 +21,9 @@ def setup_log(level):
     logging.getLogger().addHandler(file_log_handler)
 
 
+# Redis空连接
+redis_store = None
+
 # 创建SQLAlchemy对象
 db = SQLAlchemy()
 
@@ -34,6 +36,7 @@ def create_app(config_name):
     # 配置文件加载
     app.config.from_object(configs[config_name])
 
+    global redis_store
     # 创建连接到Redis数据库对象
     redis_store = StrictRedis(host=configs[config_name].REDIS_HOST, port=configs[config_name].REDIS_PORT)
 
@@ -46,7 +49,9 @@ def create_app(config_name):
     # 把app传给db
     db.init_app(app)
 
-    #将蓝图注册到app
+    # 在哪里注册就在哪里导包
+    from info.modules.index import index_blue
+    # 将蓝图注册到app
     app.register_blueprint(index_blue)
 
     return app
