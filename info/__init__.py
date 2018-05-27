@@ -51,7 +51,9 @@ def create_app(config_name):
 
     # 在哪里注册就在哪里导包
     from info.modules.index import index_blue
+    from info.modules.users import users_blue
     # 将蓝图注册到app
     app.register_blueprint(index_blue)
+    app.register_blueprint(users_blue)
 
     return app
