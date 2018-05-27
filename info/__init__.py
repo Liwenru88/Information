@@ -5,6 +5,7 @@ from flask_session import Session
 from flask_wtf.csrf import CSRFProtect
 from Config import configs
 from logging.handlers import RotatingFileHandler
+from info.modules.index import index_blue
 import logging
 
 
@@ -44,5 +45,8 @@ def create_app(config_name):
 
     # 把app传给db
     db.init_app(app)
+
+    #将蓝图注册到app
+    app.register_blueprint(index_blue)
 
     return app
