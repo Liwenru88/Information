@@ -15,8 +15,7 @@ import base64
 import datetime
 from urllib import request as urllib2
 import json
-from .xmltojson import xmltojson
-
+from info.libs.yuntongxun.xmltojson import xmltojson
 
 class REST:
     AccountSid = ''
@@ -322,12 +321,13 @@ class REST:
             <playTimes>%s</playTimes><respUrl>%s</respUrl><userData>%s</userData><maxCallTime>%s</maxCallTime><speed>%s</speed>
             <volume>%s</volume><pitch>%s</pitch><bgsound>%s</bgsound></LandingCall>\
             ''' % (
-        to, mediaName, mediaTxt, self.AppId, displayNum, playTimes, respUrl, userData, maxCallTime, speed, volume,
-        pitch, bgsound)
-        if self.BodyType == 'json':
-            body = '''{"to": "%s", "mediaName": "%s","mediaTxt": "%s","appId": "%s","displayNum": "%s","playTimes": "%s","respUrl": "%s","userData": "%s","maxCallTime": "%s","speed": "%s","volume": "%s","pitch": "%s","bgsound": "%s"}''' % (
             to, mediaName, mediaTxt, self.AppId, displayNum, playTimes, respUrl, userData, maxCallTime, speed, volume,
             pitch, bgsound)
+        if self.BodyType == 'json':
+            body = '''{"to": "%s", "mediaName": "%s","mediaTxt": "%s","appId": "%s","displayNum": "%s","playTimes": "%s","respUrl": "%s","userData": "%s","maxCallTime": "%s","speed": "%s","volume": "%s","pitch": "%s","bgsound": "%s"}''' % (
+                to, mediaName, mediaTxt, self.AppId, displayNum, playTimes, respUrl, userData, maxCallTime, speed,
+                volume,
+                pitch, bgsound)
         req.data = body.encode()
         data = ''
         try:
@@ -386,7 +386,7 @@ class REST:
         if self.BodyType == 'json':
             # if this model is Json ..then do next code 
             body = '''{"appId": "%s", "verifyCode": "%s","playTimes": "%s","to": "%s","respUrl": "%s","displayNum": "%s","lang": "%s","userData": "%s"}''' % (
-            self.AppId, verifyCode, playTimes, to, respUrl, displayNum, lang, userData)
+                self.AppId, verifyCode, playTimes, to, respUrl, displayNum, lang, userData)
         req.data = body.encode()
         data = ''
         try:

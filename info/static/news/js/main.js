@@ -189,6 +189,29 @@ function sendSMSCode() {
     }
 
     // TODO 发送短信验证码
+
+    var params={
+        'mobile':mobile,
+        'image_code':imageCode,
+        'image_code_id':imageCodeId
+    }
+
+    $.ajax({
+        url: '/users/sms_code',
+        type: 'post',
+        data: JSON.stringify(params),
+        contentType: 'application/json',
+        success: function (response) {
+            if (response.error == '0') {
+                alert("发送短信验证码成功")
+            } else {
+                alert(response.errmsg)
+            }
+
+        }
+
+    });
+
 }
 
 // 调用该函数模拟点击左侧按钮
