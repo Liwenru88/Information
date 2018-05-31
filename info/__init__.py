@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from redis import StrictRedis
 from flask_session import Session
 from flask_wtf.csrf import CSRFProtect
+from flask_wtf import csrf
 from Config import configs
 from logging.handlers import RotatingFileHandler
 import logging
@@ -42,7 +43,14 @@ def create_app(config_name):
                               decode_responses=True)
 
     # 开启CSRF保护
-    # CSRFProtect(app)
+    CSRFProtect(app)
+
+    @app.after_request
+    def after_request(response):
+        # 生成csrf随机值
+        csrf_token = csrf.generate_csrf()
+        response.set_cookie('csrf_token', csrf_token)
+        return response
 
     # 配置flask_session,将session数据写入到服务器的redis数据库
     Session(app)
@@ -56,5 +64,18 @@ def create_app(config_name):
     # 将蓝图注册到app
     app.register_blueprint(index_blue)
     app.register_blueprint(users_blue)
+
+    # 过滤器
+    def do_rank(index):
+        if index == 1:
+            return "first"
+        elif index == 2:
+            return "second"
+        elif index == 3:
+            return "third"
+        else:
+            return ""
+
+    app.add_template_filter(do_rank, "rank")
 
     return app

@@ -59,13 +59,13 @@ class User(BaseModel, db.Model):
 
     @property
     def password(self):
-        raise AttributeError("当前属性不可读")
+        return AttributeError("can not read")
 
     @password.setter
     def password(self, value):
         self.password_hash = generate_password_hash(value)
 
-    def check_passowrd(self, password):
+    def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
     def to_dict(self):

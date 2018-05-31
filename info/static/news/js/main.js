@@ -119,6 +119,27 @@ $(function () {
         }
 
         // 发起登录请求
+        var params = {
+            'mobile': mobile,
+            'password': password
+        }
+
+        $.ajax({
+            url: '/users/login',
+            type: 'post',
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            headers: {'X-CSRFToken': getCookie('csrf_token')},
+            success: function (response) {
+                if (response.errno == '0') {
+                    alert(response.errmsg)
+                    location.reload();
+                } else {
+                    alert(response.errmsg)
+                }
+            }
+
+        });
     })
 
 
@@ -154,8 +175,57 @@ $(function () {
 
         // 发起注册请求
 
+        var params = {
+
+            'mobile': mobile,
+            'smscode': smscode,
+            'password': password
+        }
+
+        $.ajax({
+            url: "/users/register",
+            type: 'post',
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            headers: {'X-CSRFToken': getCookie('csrf_token')},
+            success: function (response) {
+                if (response.errno == '0') {
+                    alert(response.errno)
+                    location.reload();
+                } else {
+                    alert(response.errmsg)
+                }
+            }
+        });
+
     })
 })
+
+//退出登入
+function logout() {
+    // $.ajax({
+    //     url: '/users/logout',
+    //     type: 'get',
+    //     success: function (response) {
+    //         if (response.errno == '0') {
+    //             alert("退出成功")
+    //             location.reload();
+    //         } else {
+    //             alert(response.errmsg)
+    //         }
+    //     }
+    // });
+
+    $.get('/users/logout', function (response) {
+        if (response.errno == '0') {
+            alert("退出成功")
+            location.reload();
+        } else {
+            alert(response.errmsg)
+        }
+    })
+}
+
 
 var imageCodeId = ""
 
@@ -190,10 +260,10 @@ function sendSMSCode() {
 
     // TODO 发送短信验证码
 
-    var params={
-        'mobile':mobile,
-        'image_code':imageCode,
-        'image_code_id':imageCodeId
+    var params = {
+        'mobile': mobile,
+        'image_code': imageCode,
+        'image_code_id': imageCodeId
     }
 
     $.ajax({
@@ -201,13 +271,34 @@ function sendSMSCode() {
         type: 'post',
         data: JSON.stringify(params),
         contentType: 'application/json',
+        headers: {'X-CSRFToken': getCookie('csrf_token')},
         success: function (response) {
-            if (response.error == '0') {
-                alert("发送短信验证码成功")
+            if (response.errno == '0') {
+                // 发送成功后，进行倒计时
+                var num = 60;
+                var t = setInterval(function () {
+                    if (num == 1) {
+                        // 倒计时完成,清除定时器
+                        clearInterval(t);         // 重新生成验证码
+                        generateImageCode();
+                        // 重置内容
+                        $(".get_code").html('点击获取验证码');
+                        // 重新添加点击事件
+                        $(".get_code").attr("onclick", "sendSMSCode();");
+                    } else {
+                        // 正在倒计时，显示秒数
+                        $(".get_code").html(num + '秒');
+                    }
+                    // 每一秒减一
+                    num -= 1;
+                }, 1000);
             } else {
-                alert(response.errmsg)
+                alert(response.errmsg);
+                // 重新生成验证码
+                generateImageCode();
+                // 重新添加点击事件
+                $(".get_code").attr("onclick", "sendSMSCode();");
             }
-
         }
 
     });
